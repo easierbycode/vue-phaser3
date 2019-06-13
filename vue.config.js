@@ -19,6 +19,12 @@ module.exports = {
             name: `${rule.dir}/[name].[hash:8].[ext]`
           })
     })
+
+    config.module
+      .rule('html')
+      .test(/phone\.html$/)
+      .use('html-loader')
+        .loader('html-loader')
   },
   devServer: {
     open: true,
