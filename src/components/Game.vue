@@ -23,6 +23,9 @@ export default {
 }
 </script>
 
+<style lang="scss" global>
+  @import './devices';
+</style>
 
 <style lang="scss" scoped>
 .placeholder {

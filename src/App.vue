@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./game/assets/vue-logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + Vuex + Phaser3 + TypeScript App"/>
+    <!-- <img alt="Vue logo" src="./game/assets/vue-logo.png"> -->
+    <h1>SidePiece</h1>
     <Game />
   </div>
 </template>
@@ -21,6 +21,10 @@ export default class App extends Vue {}
 </script>
 
 <style lang="scss">
+body {
+  background-color: black;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
