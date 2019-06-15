@@ -26,8 +26,19 @@ module.exports = {
       .use('html-loader')
         .loader('html-loader')
   },
+
   devServer: {
     open: true,
     hot: false
-  }
+  },
+
+  pluginOptions: {
+    quasar: {
+      treeShake: true
+    }
+  },
+
+  transpileDependencies: [
+    /[\\\/]node_modules[\\\/]quasar[\\\/]/
+  ]
 }
