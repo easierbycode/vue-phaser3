@@ -8,6 +8,7 @@ export default class PlayScene extends Scene {
   a: number = 0;
   game: any;
   phoneDiv: any;
+  gamepad: any;
   
   constructor () {
     super({ key: 'PlayScene' })
@@ -87,9 +88,20 @@ export default class PlayScene extends Scene {
     this.phoneDiv.body.setVelocity(100, 200);
     this.phoneDiv.body.setBounce(1, 1);
     this.phoneDiv.body.setCollideWorldBounds(true);
+
+    this.input.gamepad.once('down', (pad: any, button: any, index: any) => {
+        this.gamepad = pad;
+        console.log('GAMEPAD DETECTED:');
+        console.log(this.gamepad);
+    });
   }
 
   update () {
+    if (this.gamepad) {
+      // do stuff.  i.e.:
+      // if (gamepad.left) {}
+    }
+
     this.physics.world.collide(this.phoneDiv);
 
     this.a += 0.005;

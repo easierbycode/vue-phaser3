@@ -12,6 +12,9 @@ function launch() {
     dom: {
       createContainer: true
     },
+    input: {
+      gamepad: true,
+    },
     physics: {
       default: 'arcade',
       arcade: {
