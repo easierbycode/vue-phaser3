@@ -1,6 +1,7 @@
 <template>
   <q-page class="flex flex-center">
-    <img alt="Quasar logo" src="../assets/logo.png">
+    <!-- <img alt="Quasar logo" src="../assets/logo.png"> -->
+    <Game />
   </q-page>
 </template>
 
@@ -8,7 +9,13 @@
 </style>
 
 <script>
+import Game from './Game.vue'
+
 export default {
-  name: 'HelloWorld'
+  name: 'HelloWorld',
+
+  components: {
+    Game
+  }
 }
 </script>
