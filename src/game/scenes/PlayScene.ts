@@ -1,4 +1,5 @@
 import { Scene } from 'phaser'
+import WeaponPlugin from 'phaser3-weapon-plugin'
 
 
 export default class PlayScene extends Scene {
@@ -9,13 +10,15 @@ export default class PlayScene extends Scene {
   game: any;
   phoneDiv: any;
   gamepad: any;
-  
+  sprite: any;
+
   constructor () {
     super({ key: 'PlayScene' })
   }
 
   preload() {
     this.load.image('spark', require('@/game/assets/blue.png'))
+    this.plugins.installScenePlugin('WeaponPlugin', WeaponPlugin, 'weapons', this);
   }
 
   create() {
@@ -93,15 +96,26 @@ export default class PlayScene extends Scene {
         this.gamepad = pad;
         console.log('GAMEPAD DETECTED:');
         console.log(this.gamepad);
+
+        this.sprite = this.add.text(x1, y1, '🤬', { fontFamily: 'Arial', fontSize: 48, fill: '#ff0000' });
+        this.sprite.setOrigin(0.5, 0.5);
+
+        const weapon = this.weapons.add(32, 'spark');
+        weapon.nextFire = 0;
+        weapon.bulletSpeed = 600;
+        weapon.fireRate = 40;
+        weapon.bulletAngleVariance = 10;
+        weapon.trackSprite(this.sprite, 0, 0, true);
+        
+        this.sprite.weapons = [
+          weapon
+        ];
+
+        this.sprite.currentWeapon = 0;
     });
   }
 
   update () {
-    if (this.gamepad) {
-      // do stuff.  i.e.:
-      // if (gamepad.left) {}
-    }
-
     this.physics.world.collide(this.phoneDiv);
 
     this.a += 0.005;
@@ -119,5 +133,82 @@ export default class PlayScene extends Scene {
 
     this.graphics.fillStyle(0xff00ff);
     this.graphics.fillRect(this.point.x - 8, this.point.y - 8, this.point.width, this.point.height);
+
+    if (this.input.gamepad.total === 0)
+    {
+        return;
+    }
+
+    var pad = this.input.gamepad.getPad(0);
+
+    if (this.sprite && pad.axes.length)
+    {
+        var axisH = pad.axes[0].getValue();
+        var axisV = pad.axes[1].getValue();
+
+        if (axisH) {
+          this.sprite.x += 4 * axisH;
+          this.sprite.flipX = true;
+        }
+        if (axisV)  this.sprite.y += 4 * axisV;
+
+        let rightStickX     = pad.axes[(Phaser.Input.Gamepad.Configs.XBOX_360 as IGamepad).RIGHT_STICK_H].getValue();  // gamepad.axis( Phaser.Gamepad.XBOX360_STICK_RIGHT_X );
+        let rightStickY     = pad.axes[(Phaser.Input.Gamepad.Configs.XBOX_360 as IGamepad).RIGHT_STICK_V].getValue();  // gamepad.axis( Phaser.Gamepad.XBOX360_STICK_RIGHT_Y );
+        rightStickX         = ( Math.abs( rightStickX ) > pad.axes[2].threshold ) ? rightStickX : 0;
+        rightStickY         = ( Math.abs( rightStickY ) > pad.axes[3].threshold ) ? rightStickY : 0;
+        let thumbstickAngle = this.coordinatesToRadians( rightStickX, rightStickY );
+
+        if ( thumbstickAngle != null ) {
+            this.sprite.rotation  = thumbstickAngle;  // - 90;
+
+            this.sprite.weapons[ this.sprite.currentWeapon ].fire();
+
+            this.sprite.rotation  = thumbstickAngle - 90;  // TODO: rotate emoji -90 instead of hack
+        }
+    }
   }
+
+  coordinatesToRadians(x: number, y: number): number | null {
+      if (x === 0 && y === 0) {
+          return null;
+      }
+
+      let radians = Math.atan2(y, x);
+      if (radians < 0) {
+          radians += 2 * Math.PI;
+      }
+      return Math.abs(radians);
+  }
+}
+
+
+interface IGamepad {
+  UP: number;
+  DOWN: number;
+  LEFT: number;
+  RIGHT: number;
+
+  MENU: number;
+
+  A: number;
+  B: number;
+  X: number;
+  Y: number;
+
+  LB: number;
+  RB: number;
+
+  LT: number;
+  RT: number;
+
+  BACK: number;
+  START: number;
+
+  LS: number;
+  RS: number;
+
+  LEFT_STICK_H: number;
+  LEFT_STICK_V: number;
+  RIGHT_STICK_H: number;
+  RIGHT_STICK_V: number;
 }
