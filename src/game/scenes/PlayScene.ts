@@ -2,6 +2,12 @@ import { Scene } from 'phaser'
 import WeaponPlugin from 'phaser3-weapon-plugin'
 
 
+class SparkGun extends WeaponPlugin.Weapon {
+  constructor(scene: any, bulletLimit: number = 32, key: string = 'spark', frame: number = 0, group?: any) {
+    super(scene, bulletLimit, key, frame, group);
+  }
+}
+
 export default class PlayScene extends Scene {
   graphics: any;
   triangle: any;
@@ -105,6 +111,9 @@ export default class PlayScene extends Scene {
         weapon.bulletSpeed = 600;
         weapon.fireRate = 40;
         weapon.bulletAngleVariance = 10;
+
+        // add(bulletLimit, key, frame, group, weaponClass)
+        // const weapon = this.weapons.add(32, 'spark', 0, null, SparkGun);
         weapon.trackSprite(this.sprite, 0, 0, true);
         
         this.sprite.weapons = [
