@@ -1,10 +1,22 @@
-import { Scene } from 'phaser'
+import { GameObjects, Scene } from 'phaser'
 import WeaponPlugin from 'phaser3-weapon-plugin'
 
 
-class SparkGun extends WeaponPlugin.Weapon {
-  constructor(scene: any, bulletLimit: number = 32, key: string = 'spark', frame: number = 0, group?: any) {
-    super(scene, bulletLimit, key, frame, group);
+// class SparkGun extends WeaponPlugin.Weapon {
+//   constructor(scene: any, bulletLimit: number = 32, key: string = 'spark', frame: number = 0, group?: any) {
+//     super(scene, bulletLimit, key, frame, group);
+//   }
+// }
+class SparkGun {
+  static create(scene: Scene, sprite: GameObjects.Sprite): any {
+    const weapon = new WeaponPlugin.Weapon(scene, 32, 'spark', 0, null);
+    weapon.bulletSpeed = 600;
+    weapon.fireRate = 40;
+    weapon.bulletAngleVariance = 10;
+
+    weapon.trackSprite(sprite, 0, 0, true);
+
+    return weapon;
   }
 }
 
@@ -106,16 +118,10 @@ export default class PlayScene extends Scene {
         this.sprite = this.add.text(x1, y1, '🤬', { fontFamily: 'Arial', fontSize: 48, fill: '#ff0000' });
         this.sprite.setOrigin(0.5, 0.5);
 
-        const weapon = this.weapons.add(32, 'spark');
-        weapon.nextFire = 0;
-        weapon.bulletSpeed = 600;
-        weapon.fireRate = 40;
-        weapon.bulletAngleVariance = 10;
+        const weapon = SparkGun.create(this, this.sprite);
 
-        // add(bulletLimit, key, frame, group, weaponClass)
         // const weapon = this.weapons.add(32, 'spark', 0, null, SparkGun);
-        weapon.trackSprite(this.sprite, 0, 0, true);
-        
+
         this.sprite.weapons = [
           weapon
         ];
