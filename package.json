@@ -19,7 +19,7 @@
     "@vue/cli-plugin-babel": "^3.7.0",
     "@vue/cli-plugin-typescript": "^3.8.1",
     "@vue/cli-service": "^3.7.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "sass-loader": "^7.0.1",
     "serve": "^11.0.1",
     "typescript": "^3.5.1",
